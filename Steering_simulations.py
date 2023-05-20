@@ -1,74 +1,66 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[43]:
-
-
 # A collection of algorithms to desribe the relationship between steering parameters and rolling resistance 
 # For use by Eco Illini Supermileage
 # Created by: Arjun Shah 
 import numpy as np
+from sympy import Symbol, solve, Eq
 import matplotlib as mpl
 from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
 # stores unit conversions to m-kg-radians
-class Unit_conversions: 
-    inches = 0.0254
-    feet = 0.3048
-    cm = 0.01
-    mm = 0.001
-    radians = np.radians(1)
-    pounds = 0.453592
-    gravity = 9.81
-    
-Units = Unit_conversions()  
+from Utils.helper_functions import *
+
+Units = create_units()
+# class to store wheel forces and moments
+class Wheel(): 
+    fLongitudinal = 0
+    fLateral = 0
+    fNormal = 0
+    mOverturning = 0 
+    mRolling = 0 
+    mAligning = 0
+    def __init__(self, diameter, toe, camber):
+        self.diameter = diameter
+        self.toe = toe
+        self.camber = camber
 # Class to store vehicle parameters
 class Vehicle():
-    def __init__(self, Steering_type, Toe, Camber): 
-        self.Steering_type = Steering_type
-        self.Toe = Toe
-        self.Camber = Camber
-    Vehicle_type = "3-wheel"
-    #Vehicle_steering = Steering(Steering_type, Toe, Camber)
+    # vehicle parameters
+    vehicle_type = "3-wheel"
     wheelbase = 71.725 * Units.inches
     track_width = 10.75 * 2 * Units.inches
     wheel_diameter = 20 * Units.inches
-    COG = np.array([46 * Units.inches, 0, 0]) # see notes on VFCS (Vehicle fixed coordinate system)
-    # plots vehicle according to given parameters
-    def plot_vehicle(self): 
-        theta = np.linspace(0, 2 * np.pi, 101)
-        rear_x = self.wheel_diameter / 2 * np.cos(theta)
-        rear_y = 0 * theta
-        rear_z = self.wheel_diameter / 2 * np.sin(theta)
-        
-        front_r_x = self.wheelbase + self.wheel_diameter / 2 * np.cos(theta)
-        front_r_y = np.full(shape=theta.size, fill_value=self.track_width)
-        front_r_z = self.wheel_diameter / 2 * np.sin(theta)
-        
-        front_l_x = self.wheelbase + self.wheel_diameter / 2 * np.cos(theta)
-        front_l_y = np.full(shape=theta.size, fill_value=-self.track_width)
-        front_l_z = self.wheel_diameter / 2 * np.sin(theta)
-        
-        fig = plt.figure()
-        ax = fig.add_subplot(111, projection='3d')
-        ax.plot(rear_x, rear_y, rear_z)
-        ax.plot(front_r_x, front_r_y, front_r_z)
-        ax.plot(front_l_x, front_l_y, front_l_z)
-        ax.plot(self.COG[0], self.COG[1], self.COG[2], 'o')
-        ax.set_aspect("equal")
-        plt.show()
+    COG = np.array([40 * Units.inches, 0, 0]) # see notes on VFCS (Vehicle fixed coordinate system)
+    vehicle_mass = 120 * Units.pounds
+    driver_mass = 110 * Units.pounds
+    total_mass = vehicle_mass + driver_mass
+    total_weight = total_mass * Units.gravity
+    RR_coeff = 0.0024 # Rolling Resistance Coefficient
+    def __init__(self, steering_type, toe, camber): 
+        self.steering_type = steering_type
+        self.toe = toe * Units.radians
+        self.camber = camber * Units.radians
+        # initializing wheels
+        self.frontl = Wheel(self.wheel_diameter, toe, camber)
+        self.frontr = Wheel(self.wheel_diameter, toe, camber)
+        self.rear = Wheel(self.wheel_diameter, 0, 0)
+        self.wheels = {'frontl': self.frontl, 'frontr': self.frontr, 'rear': self.rear}
     # obtains baseline normal forces on each wheel through static balance 
     def get_base_normal(self):
-        pass
+        f_front = Symbol('front')
+        f_rear = Symbol('rear')
+        F_balance = Eq(f_front + f_rear - self.total_weight, 0)
+        M_balance = Eq(f_front * self.wheelbase -self.total_weight * self.COG[0], 0)
+        normals = solve([F_balance, M_balance], f_front, f_rear, dict=True)[0]
 
-    # obtains baseline rolling resistance
-    # assumes level road with a linear relationship betwen weight and rolling resistance without toe or camber
-    def get_baseline_resistance(self):
-        pass
+        self.frontl.fNormal = normals[f_front]/2
+        self.frontr.fNormal = normals[f_front]/2
+        self.rear.fNormal = normals[f_rear]
 
-    # obtains straight-line rolling resistance (Toe included)
-    def get_straight_resistance(self): 
-        pass
+    # obtains the longitudinal force on each wheel given the normal forces
+    def get_f_longitudinal(self):
+        for wheel in self.wheels.values(): 
+            wheel.fLongitudinal = wheel.fNormal * self.RR_coeff
+
 # Class to store vehicle positioning attributes
 class Position(): 
     pass 
@@ -77,15 +69,12 @@ class Position():
 class Steering(): 
     pass
 
+Eco = Vehicle("Ackermann", 20, 20)
+plot_vehicle(Eco)
+Eco.get_base_normal()
+Eco.get_f_longitudinal()
+print (Eco.frontl.fLongitudinal, Eco.rear.fLongitudinal)
 
-# In[44]:
-
-
-Eco = Vehicle("Ackermann", 0, 0)
-Eco.plot_vehicle()
-
-
-# In[ ]:
 
 
 
