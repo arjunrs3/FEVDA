@@ -8,18 +8,13 @@ from Utils.helper_functions import *
 
 # Solve the bicycle problem for a turn of given radius 
 def get_turning_values(Vehicle, velocity, radius): 
-    get_base_normal(Vehicle)
-    for wheel in Vehicle.wheels.values(): 
-        get_cornering_stiffness(wheel, wheel.pressure)
-        get_RRcoeff(wheel, wheel.camber)
-        wheel.fLongitudinal = wheel.RRcoeff * wheel.fNormal
     R = radius
     Xg = Vehicle.COG[0]
     Fc = Vehicle.total_mass * velocity ** 2 / R #centripetal contribution
     L = Vehicle.wheelbase
-    Cf = (Vehicle.frontl.cornering_stiffness + Vehicle.frontr.cornering_stiffness) / 2
+    Cf = (Vehicle.frontl.cornering_stiffness_turning + Vehicle.frontr.cornering_stiffness_turning) / 2
     Cr = Vehicle.rear.cornering_stiffness
-    Fxf = (Vehicle.frontl.fLongitudinal + Vehicle.frontr.fLongitudinal) / 2
+    Fxf = Vehicle.frontl.fLongitudinal + Vehicle.frontr.fLongitudinal # combined for bicycle problem
     Fxr = Vehicle.rear.fLongitudinal
     delta, alphaf, alphar, beta, e, fflateral, rflateral, T = symbols('delta, alphaf, alphar, beta, e, fflateral, rflateral, T')
     def func(x): 
@@ -40,3 +35,12 @@ def get_turning_values(Vehicle, velocity, radius):
     fflateral = turning_values[5]
     rflateral = turning_values[6]
     T = turning_values[7]
+
+# solve the straight line problem for a given toe
+def get_straight_rolling_resistance(Vehicle):
+    total_drag = 0 
+    for wheel in Vehicle.wheels.values(): 
+        total_drag = total_drag + np.cos((wheel.toe)) * wheel.fLongitudinal + np.sin((wheel.toe)) * wheel.cornering_stiffness * np.degrees(wheel.toe)
+        print (np.degrees(wheel.toe))
+        print (wheel.cornering_stiffness)
+    print (total_drag)

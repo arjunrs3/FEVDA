@@ -17,7 +17,8 @@ def create_units():
                    'radians': np.radians(1),
                    'pounds': 0.453592,
                    'gravity': 9.81,
-                   'psi': 6894.75}
+                   'psi': 6894.75,
+                   'mph': 0.44704}
     return Units(Conversions)
 
 # plot the vehicle for setup validation
@@ -58,10 +59,11 @@ def get_cornering_stiffness(wheel, pressure):
     a31 = 15.101
     a40 = -0.082
     a41 = 0.186
-    print (wheel.fNormal)
-    wheel.cornering_stiffness = (a30 + a31 * pressure * 10 ** -5) * np.sin(2 * np.arctan(float(wheel.fNormal/1000/(a40 + a41  * pressure * 10 ** -5))))
-    print (wheel.cornering_stiffness)
-
+    if wheel.tag == "front": 
+        fNormal_eff = wheel.fNormal / 1000 * 2 # effectively combines the two front wheels into one wheel for the bicycle problem
+        wheel.cornering_stiffness_turning = (a30 + a31 * pressure * 10 ** -5) * np.sin(2 * np.arctan(float(fNormal_eff/(a40 + a41  * pressure * 10 ** -5))))
+    fNormal_eff = wheel.fNormal / 1000
+    wheel.cornering_stiffness = (a30 + a31 * pressure * 10 ** -5) * np.sin(2 * np.arctan(float(fNormal_eff/(a40 + a41  * pressure * 10 ** -5))))
 # obtains baseline normal forces on each wheel through static balance 
 def get_base_normal(self):
     f_front = Symbol('front')
@@ -70,8 +72,8 @@ def get_base_normal(self):
     M_balance = Eq(f_front * self.wheelbase -self.total_weight * self.COG[0], 0)
     normals = solve([F_balance, M_balance], f_front, f_rear, dict=True)[0]
 
-    self.frontl.fNormal = normals[f_front] # double the weight
-    self.frontr.fNormal = normals[f_front] # double the weight
+    self.frontl.fNormal = normals[f_front] / 2
+    self.frontr.fNormal = normals[f_front] / 2
     self.rear.fNormal = normals[f_rear]
 
 # obtains the longitudinal force on each wheel given the normal forces

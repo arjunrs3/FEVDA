@@ -19,12 +19,14 @@ class Wheel():
     mRolling = 0 
     mAligning = 0
     pressure = 87.022 * Units.psi
-    def __init__(self, diameter, toe, camber):
+    def __init__(self, diameter, toe, camber, tag):
+        self.tag = tag
         self.diameter = diameter
         self.toe = toe
         self.camber = camber
         get_RRcoeff(self, self.camber)
         get_cornering_stiffness(self, self.pressure)
+        print (toe)
 # Class to store vehicle parameters
 class Vehicle():
     # vehicle parameters
@@ -39,13 +41,18 @@ class Vehicle():
     total_weight = total_mass * Units.gravity
     def __init__(self, steering_type, toe, camber): 
         self.steering_type = steering_type
-        self.toe = toe * Units.radians
-        self.camber = camber * Units.radians
+        self.toe = np.radians(toe)
+        self.camber = np.radians(camber)
         # initializing wheels
-        self.frontl = Wheel(self.wheel_diameter, toe, camber)
-        self.frontr = Wheel(self.wheel_diameter, toe, camber)
-        self.rear = Wheel(self.wheel_diameter, 0, 0)
+        self.frontl = Wheel(self.wheel_diameter, self.toe, self.camber, "front")
+        self.frontr = Wheel(self.wheel_diameter, self.toe, self.camber, "front")
+        self.rear = Wheel(self.wheel_diameter, 0, 0, "rear")
         self.wheels = {'frontl': self.frontl, 'frontr': self.frontr, 'rear': self.rear}
+        get_base_normal(self)
+        for wheel in self.wheels.values(): 
+            get_cornering_stiffness(wheel, wheel.pressure)
+            get_RRcoeff(wheel, wheel.camber)
+            wheel.fLongitudinal = wheel.RRcoeff * wheel.fNormal
 
 
 # Class to store vehicle positioning attributes
@@ -56,10 +63,10 @@ class Position():
 class Steering(): 
     pass
 
-Eco = Vehicle("Ackermann", 0, 0)
+Eco = Vehicle("Ackermann", 0.25, 0)
 # plot_vehicle(Eco)
 
-get_turning_values(Eco, 8.33333, 15)
+get_straight_rolling_resistance(Eco)
 
 
 
