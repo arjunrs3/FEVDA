@@ -35,12 +35,11 @@ def get_turning_values(Vehicle, velocity, radius):
     fflateral = turning_values[5]
     rflateral = turning_values[6]
     T = turning_values[7]
+    return(T, fflateral, rflateral, delta)
 
 # solve the straight line problem for a given toe
 def get_straight_rolling_resistance(Vehicle):
     total_drag = 0 
     for wheel in Vehicle.wheels.values(): 
         total_drag = total_drag + np.cos((wheel.toe)) * wheel.fLongitudinal + np.sin((wheel.toe)) * wheel.cornering_stiffness * np.degrees(wheel.toe)
-        print (np.degrees(wheel.toe))
-        print (wheel.cornering_stiffness)
-    print (total_drag)
+    return total_drag

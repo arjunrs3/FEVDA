@@ -9,6 +9,8 @@ import matplotlib.pyplot as plt
 # stores unit conversions to m-kg-radians
 from Utils.helper_functions import *
 from Scripts.tires import *
+from Scripts.aero import *
+
 Units = create_units()
 # class to store wheel forces and moments
 class Wheel(): 
@@ -35,10 +37,12 @@ class Vehicle():
     track_width = 0.5 # 10.75 * 2 * Units.inches
     wheel_diameter = 20 * Units.inches
     COG = np.array([1, 0, 0]) # see notes on VFCS (Vehicle fixed coordinate system)
-    vehicle_mass = 165.35 * Units.pounds
-    driver_mass = 0 * Units.pounds
+    vehicle_mass = 110 * Units.pounds
+    driver_mass = 120 * Units.pounds
     total_mass = vehicle_mass + driver_mass
     total_weight = total_mass * Units.gravity
+    frontal_area = 0.18 * 2
+    drag_coeff = 0.1
     def __init__(self, steering_type, toe, camber): 
         self.steering_type = steering_type
         self.toe = np.radians(toe)
@@ -55,19 +59,11 @@ class Vehicle():
             wheel.fLongitudinal = wheel.RRcoeff * wheel.fNormal
 
 
-# Class to store vehicle positioning attributes
-class Position(): 
-    pass 
-
-# Class to instantiate different steering geometries (e.g., Ackermann, parallel)
-class Steering(): 
-    pass
-
-Eco = Vehicle("Ackermann", 0.25, 0)
+Eco = Vehicle("Ackermann", 0, 0)
 # plot_vehicle(Eco)
 
 get_straight_rolling_resistance(Eco)
-
+print (get_aerodynamic_drag(Eco, 8.94))
 
 
 

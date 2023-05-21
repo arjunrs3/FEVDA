@@ -51,8 +51,8 @@ def plot_vehicle(self):
 camberRRdata = 0.0024 / 0.00081 * np.array([[0, 4, 7, 10, 12, 14],[0.000832, 0.001, 0.00099, 0.00105, 0.0011, 0.0012]]) # data from Pac CAR scaled for Michelin Cross-Ply tires
 
 def get_RRcoeff(wheel, camber): 
-    #wheel.RRcoeff = np.interp(camber, camberRRdata[0], camberRRdata[1])
-    wheel.RRcoeff = 0.00081
+    wheel.RRcoeff = np.interp(camber, camberRRdata[0], camberRRdata[1])
+
 # get the cornering stiffness according to a simplified form of the Magic Formula
 def get_cornering_stiffness(wheel, pressure): 
     a30 = 57.806
