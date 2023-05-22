@@ -36,7 +36,7 @@ class Wheel():
 class ICE(): 
     BSFC = 0.426 / 60 / 60 # kg / s / kW
     I =  0.09 # Moment of Inertia (dominated by flywheel)
-    fuel_density = 737.22 # kg / m ** 3 
+    fuel_density = 742.9 # kg / m ** 3 
     def __init__(self):
         self.torque_polynomial = get_torque_polynomial() # Nm
         self.power_polynomial = get_power_polynomial() # kW
@@ -61,6 +61,7 @@ class Vehicle():
     position = np.array([0, 0]).astype(float)
     velocity = np.array([0.01, 0.01]).astype(float)
     fuel_consumed = 0
+    distance = 0
     def __init__(self, powerplant, toe, camber): 
         self.powerplant = powerplant
         self.toe = np.radians(toe)

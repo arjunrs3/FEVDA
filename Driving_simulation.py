@@ -87,6 +87,7 @@ for i in range (track[:, 0].size):
                 burning = true
                 VFR = get_volumetric_fuel_rate(Eco, np.linalg.norm(Eco.velocity))
                 Eco.fuel_consumed += VFR * dt
+                print (VFR)
             elif np.linalg.norm(Eco.velocity) > 20 * Units.mph: 
                 acc_straight = get_straight_acceleration(Eco, "coast")
                 burning = false
@@ -95,6 +96,7 @@ for i in range (track[:, 0].size):
                 burning = true
                 VFR = get_volumetric_fuel_rate(Eco, np.linalg.norm(Eco.velocity))
                 Eco.fuel_consumed += VFR * dt
+                print (VFR)
             else: 
                 acc_straight = get_straight_acceleration(Eco, "coast")
                 burning = false
@@ -147,7 +149,11 @@ plt.plot(t, fuel)
 plt.title("fuel consumption vs. time")
 plt.show()
 
-total_mpg = 2.5 / (Eco.fuel_consumed * 0.0000264172)
+for i in range(x.size): 
+    if i > 0: 
+        Eco.distance += np.linalg.norm(np.array([x[i], y[i]])- np.array([x[i-1], y[i-1]]))
+total_mpg = Eco.distance * 0.00062137 / (Eco.fuel_consumed * 0.000264172)
+print (Eco.distance * 0.00062137)
 print (total_mpg)
 
             
