@@ -35,7 +35,7 @@ def get_turning_values(Vehicle, velocity, radius):
     fflateral = turning_values[5]
     rflateral = turning_values[6]
     T = turning_values[7]
-    return(T, fflateral, rflateral, delta)
+    return(T, Fc, beta)
 
 # solve the straight line problem for a given toe
 def get_straight_rolling_resistance(Vehicle):

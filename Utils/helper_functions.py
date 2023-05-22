@@ -3,6 +3,7 @@ import matplotlib as mpl
 from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
 from sympy import Symbol, Eq, solve
+import csv
 # creates a Units class for attribute style access
 class Units(dict):
     def __init__(self, *args, **kwargs):
@@ -18,7 +19,8 @@ def create_units():
                    'pounds': 0.453592,
                    'gravity': 9.81,
                    'psi': 6894.75,
-                   'mph': 0.44704}
+                   'mph': 0.44704,
+                   'radps': 9.5493}
     return Units(Conversions)
 
 # plot the vehicle for setup validation
@@ -80,3 +82,16 @@ def get_base_normal(self):
 def get_f_longitudinal(self):
     for wheel in self.wheels.values(): 
         wheel.fLongitudinal = wheel.fNormal * wheel.RR_coeff
+
+def get_power_polynomial(): 
+    power = np.genfromtxt('Utils/Power.csv', delimiter=',')
+    fit = np.polyfit(power[:, 1], power[:, 0], 3)
+    poly = np.poly1d(fit) 
+    return poly # kW
+
+def get_torque_polynomial(): 
+    torque = np.genfromtxt('Utils/Torque.csv', delimiter=',')
+    fit = np.polyfit(torque[:, 1], torque[:, 0], 3)
+    poly = np.poly1d(fit)
+    return poly
+        

@@ -10,8 +10,10 @@ import matplotlib.pyplot as plt
 from Utils.helper_functions import *
 from Scripts.tires import *
 from Scripts.aero import *
+from Scripts.misc import *
 
 Units = create_units()
+
 # class to store wheel forces and moments
 class Wheel(): 
     fLongitudinal = 0
@@ -21,6 +23,7 @@ class Wheel():
     mRolling = 0 
     mAligning = 0
     pressure = 87.022 * Units.psi
+    I = 0.05
     def __init__(self, diameter, toe, camber, tag):
         self.tag = tag
         self.diameter = diameter
@@ -28,7 +31,16 @@ class Wheel():
         self.camber = camber
         get_RRcoeff(self, self.camber)
         get_cornering_stiffness(self, self.pressure)
-        print (toe)
+
+# class to store ICE parameters 
+class ICE(): 
+    BSFC = 0.426 / 60 / 60 # kg / s / kW
+    I =  0.09 # Moment of Inertia (dominated by flywheel)
+    fuel_density = 737.22 # kg / m ** 3 
+    def __init__(self):
+        self.torque_polynomial = get_torque_polynomial() # Nm
+        self.power_polynomial = get_power_polynomial() # kW
+
 # Class to store vehicle parameters
 class Vehicle():
     # vehicle parameters
@@ -43,8 +55,13 @@ class Vehicle():
     total_weight = total_mass * Units.gravity
     frontal_area = 0.18 * 2
     drag_coeff = 0.1
-    def __init__(self, steering_type, toe, camber): 
-        self.steering_type = steering_type
+    misc_drag_coeff = 0
+    gear_ratio = 1 / 18 #gear ratio from engine to wheel
+    powertrain_efficiency = 0.9
+    position = np.array([0, 0]).astype(float)
+    velocity = np.array([0.01, 0.01]).astype(float)
+    def __init__(self, powerplant, toe, camber): 
+        self.powerplant = powerplant
         self.toe = np.radians(toe)
         self.camber = np.radians(camber)
         # initializing wheels
@@ -57,14 +74,11 @@ class Vehicle():
             get_cornering_stiffness(wheel, wheel.pressure)
             get_RRcoeff(wheel, wheel.camber)
             wheel.fLongitudinal = wheel.RRcoeff * wheel.fNormal
-
-
-Eco = Vehicle("Ackermann", 0, 0)
+        self.equiv_mass = self.total_mass + 4 / (self.wheel_diameter ** 2) * (self.powerplant.I * self.gear_ratio ** 2 / self.powertrain_efficiency + 3 * self.rear.I)
+       
+Engine = ICE()
+Eco = Vehicle(Engine, 0, 0)
 # plot_vehicle(Eco)
-
-get_straight_rolling_resistance(Eco)
-print (get_aerodynamic_drag(Eco, 8.94))
-
 
 
 
