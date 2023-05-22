@@ -77,10 +77,7 @@ class Vehicle():
             get_RRcoeff(wheel, wheel.camber)
             wheel.fLongitudinal = wheel.RRcoeff * wheel.fNormal
         self.equiv_mass = self.total_mass + 4 / (self.wheel_diameter ** 2) * (self.powerplant.I * self.gear_ratio ** 2 / self.powertrain_efficiency + 3 * self.rear.I)
-       
-Engine = ICE()
-Eco = Vehicle(Engine, 0, 0)
-# plot_vehicle(Eco)
+
 
 
 

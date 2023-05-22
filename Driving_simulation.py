@@ -65,6 +65,7 @@ Eco = Vehicle(Engine, 0, 0)
 track = get_track()
 Eco.position = np.array([0, 0]).astype(float)
 Eco.velocity = np.array([-445.7664, 4.3831]) / 10000
+
 dt_0 = 0.1
 dt = 0.1
 t = 0
@@ -72,7 +73,9 @@ burning = false
 position_data = []
 velocity_data = []
 fuel_consumption = []
+
 plt.axis([-800, 800, -100, 800])
+
 for i in range (track[:, 0].size): 
     if track[i][0] == 0:
         # go straight for the specified distance
@@ -87,7 +90,6 @@ for i in range (track[:, 0].size):
                 burning = true
                 VFR = get_volumetric_fuel_rate(Eco, np.linalg.norm(Eco.velocity))
                 Eco.fuel_consumed += VFR * dt
-                print (VFR)
             elif np.linalg.norm(Eco.velocity) > 20 * Units.mph: 
                 acc_straight = get_straight_acceleration(Eco, "coast")
                 burning = false
@@ -96,7 +98,6 @@ for i in range (track[:, 0].size):
                 burning = true
                 VFR = get_volumetric_fuel_rate(Eco, np.linalg.norm(Eco.velocity))
                 Eco.fuel_consumed += VFR * dt
-                print (VFR)
             else: 
                 acc_straight = get_straight_acceleration(Eco, "coast")
                 burning = false
@@ -137,7 +138,8 @@ fuel = np.array(fuel_consumption)
 t = positions[:, 0]
 x = positions[:, 1]
 y = positions[:, 2]
-plt.plot(x, y)
+
+plt.scatter(x, y, c = velocities, cmap = 'viridis')
 plt.title("position")
 plt.show()
 
@@ -153,7 +155,6 @@ for i in range(x.size):
     if i > 0: 
         Eco.distance += np.linalg.norm(np.array([x[i], y[i]])- np.array([x[i-1], y[i-1]]))
 total_mpg = Eco.distance * 0.00062137 / (Eco.fuel_consumed * 0.000264172)
-print (Eco.distance * 0.00062137)
 print (total_mpg)
 
             
