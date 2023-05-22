@@ -16,8 +16,8 @@ def get_turning_values(Vehicle, velocity, radius):
     Cr = Vehicle.rear.cornering_stiffness
     Fxf = Vehicle.frontl.fLongitudinal + Vehicle.frontr.fLongitudinal # combined for bicycle problem
     Fxr = Vehicle.rear.fLongitudinal
-    delta, alphaf, alphar, beta, e, fflateral, rflateral, T = symbols('delta, alphaf, alphar, beta, e, fflateral, rflateral, T')
-    def func(x): 
+
+    ''' def func(x): 
         return [np.sin(x[3]) - (Xg - x[4])/R,
                 np.tan(x[0] - x[1])-(L-x[4]) / (R * np.cos(x[3])),
                 np.tan(x[2]) - x[4]/(R * np.cos(x[3])),
@@ -34,7 +34,10 @@ def get_turning_values(Vehicle, velocity, radius):
     e = turning_values[4]
     fflateral = turning_values[5]
     rflateral = turning_values[6]
-    T = turning_values[7]
+    T = turning_values[7] '''
+    T = 0.6
+    Fc = 50
+    beta = 10
     return(T, Fc, beta)
 
 # solve the straight line problem for a given toe

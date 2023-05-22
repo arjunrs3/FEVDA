@@ -60,6 +60,7 @@ class Vehicle():
     powertrain_efficiency = 0.9
     position = np.array([0, 0]).astype(float)
     velocity = np.array([0.01, 0.01]).astype(float)
+    fuel_consumed = 0
     def __init__(self, powerplant, toe, camber): 
         self.powerplant = powerplant
         self.toe = np.radians(toe)

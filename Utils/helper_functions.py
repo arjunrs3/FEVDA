@@ -95,3 +95,7 @@ def get_torque_polynomial():
     poly = np.poly1d(fit)
     return poly
         
+def get_track(): 
+    track = np.genfromtxt('Utils/track.csv', delimiter=',')
+    return track
+    # 0 = straight, 1 = turn
