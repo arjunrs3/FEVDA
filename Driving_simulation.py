@@ -58,10 +58,8 @@ def reverse_step(Vehicle, a, dt):
     Vehicle.position = Vehicle.position.astype(float)
     Vehicle.velocity = Vehicle.velocity.astype(float)
 
-def run_simulation(): 
-    Engine = ICE()
-    Eco = Vehicle(Engine, 0, 0)
-
+def run_simulation(Eco): 
+    print ("starting-simulation")
     track = get_track()
     Eco.position = np.array([0, 0]).astype(float)
     Eco.velocity = np.array([-445.7664, 4.3831]) / 10000
@@ -85,12 +83,12 @@ def run_simulation():
             print (t)
             while distance_traveled < target_distance:
                 t += dt
-                if np.linalg.norm(Eco.velocity) < 15 * Units.mph and burning == false: 
+                if np.linalg.norm(Eco.velocity) < Eco.minSpeed and burning == false: 
                     acc_straight = get_straight_acceleration(Eco, "burn")
                     burning = true
                     VFR = get_volumetric_fuel_rate(Eco, np.linalg.norm(Eco.velocity))
                     Eco.fuel_consumed += VFR * dt
-                elif np.linalg.norm(Eco.velocity) > 20 * Units.mph: 
+                elif np.linalg.norm(Eco.velocity) > Eco.maxSpeed: 
                     acc_straight = get_straight_acceleration(Eco, "coast")
                     burning = false
                 elif burning == true: 
@@ -159,9 +157,7 @@ def run_simulation():
             Eco.distance += np.linalg.norm(np.array([x[i], y[i]])- np.array([x[i-1], y[i-1]]))
     total_mpg = Eco.distance * 0.00062137 / (Eco.fuel_consumed * 0.000264172)
     ave_velocity = Eco.distance / np.max(t)
-    print (ave_velocity / Units.mph)
-    print (total_mpg)
 
-    return t, x, y, velocities, fuel, total_mpg, ave_velocity
+    return t, x, y, velocities, fuel, total_mpg, ave_velocity / Units.mph
 
             
