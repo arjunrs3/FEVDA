@@ -47,36 +47,12 @@ class Vehicle():
     vehicle_type = "3-wheel"
     wheelbase = 1.5 # 71.725 * Units.inches
     track_width = 0.5 # 10.75 * 2 * Units.inches
-    #wheel_diameter = 20 * Units.inches
-    #COG = np.array([45, 0, 0]) * Units.inches # see notes on VFCS (Vehicle fixed coordinate system)
-    #vehicle_mass = 120 * Units.pounds
-    #driver_mass = 110 * Units.pounds
-    #total_mass = vehicle_mass + driver_mass
-    #total_weight = total_mass * Units.gravity
-    #frontal_area = 0.18 * 2
-    #drag_coeff = 0.1
     misc_drag_coeff = 0
-    #gear_ratio = 1 / 18 #gear ratio from engine to wheel
-    #powertrain_efficiency = 0.9
     position = np.array([0, 0]).astype(float)
     velocity = np.array([0.01, 0.01]).astype(float)
     fuel_consumed = 0
     distance = 0
-    ''' def __init__(self, powerplant, toe, camber): 
-        self.powerplant = powerplant
-        self.toe = np.radians(toe)
-        self.camber = np.radians(camber)
-        # initializing wheels
-        self.frontl = Wheel(self.wheel_diameter, self.toe, self.camber, "front")
-        self.frontr = Wheel(self.wheel_diameter, self.toe, self.camber, "front")
-        self.rear = Wheel(self.wheel_diameter, 0, 0, "rear")
-        self.wheels = {'frontl': self.frontl, 'frontr': self.frontr, 'rear': self.rear}
-        get_base_normal(self)
-        for wheel in self.wheels.values(): 
-            get_cornering_stiffness(wheel, wheel.pressure)
-            get_RRcoeff(wheel, wheel.camber)
-            wheel.fLongitudinal = wheel.RRcoeff * wheel.fNormal '''
-        # self.equiv_mass = self.total_mass + 4 / (self.wheel_diameter ** 2) * (self.powerplant.I * self.gear_ratio ** 2 / self.powertrain_efficiency + 3 * self.rear.I)
+
     def __init__(self, values):
         COG = values[0]
         vmass = values[1]

@@ -3,7 +3,9 @@ from Driving_simulation import *
 import numpy as np
 
 sg.theme('Black')
-def run_UI():
+
+
+def run_ui():
     layout = [[sg.Text("Vehicle Parameters:", font=("Helvetica", 15, "bold"))],
             [sg.HorizontalSeparator()],
                 [sg.Text('Wheelbase: 1.5 m'), sg.Text('trackwidth: 0.5 m')], 
@@ -42,13 +44,11 @@ def run_UI():
     # Create an event loop
     while True:
         event, values = window.read()
-        print (values.values())
         values = np.array(list(values.values())).astype(float)
-        print (values)
         # End program if user closes window or
         if event == "Run Simulation": 
-            Eco = Vehicle(values)
-            t, x, y, velocities, fuel, total_mpg, ave_velocity = run_simulation(Eco)
+            eco = Vehicle(values)
+            t, x, y, velocities, fuel, total_mpg, ave_velocity = run_simulation(eco)
             window["-MPG-"].update(total_mpg)
             window["-AVE-SPEED-"].update(ave_velocity)
         if event == sg.WIN_CLOSED:
