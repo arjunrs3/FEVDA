@@ -161,3 +161,4 @@ cython_debug/
 .idea/inspectionProfiles/profiles_settings.xml
 *.iml
 *.xml
+.vscode/settings.json
