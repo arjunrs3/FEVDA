@@ -71,7 +71,8 @@ def dy_dt_straight_coasting(t, y, vehicle, orientation, initial_position, distan
 def dy_dt_turning(t, y, vehicle, orientation, radius, angle, initial_orientation): #always coasting on turning
     engine_state = "coast"
     velocity = np.array([y[2], y[3]])
-    a = get_acceleration(Vehicle = vehicle,velocity = velocity, orientation = orientation, engine_state = engine_state, radius = radius)
+    current_orientation = velocity / np.linalg.norm(velocity)
+    a = get_acceleration(Vehicle = vehicle,velocity = velocity, orientation = current_orientation, engine_state = engine_state, radius = radius)
     dx = velocity[0]
     dy = velocity[1]
     dvx = a[0]
@@ -79,9 +80,6 @@ def dy_dt_turning(t, y, vehicle, orientation, radius, angle, initial_orientation
     y[4] = a[0]
     y[5] = a[1]
     dfuel = 0
-    current_orientation = velocity / np.linalg.norm(velocity)
-    orientation = current_orientation
-    print(orientation)
     dy = [dx, dy, dvx, dvy, 0, 0, dfuel]
     return dy
 
@@ -91,7 +89,7 @@ def dy_dt_turning(t, y, vehicle, orientation, radius, angle, initial_orientation
      
 def run_simulation(track, values):
     eco = Vehicle(values)
-    y0 = [0, 0, 0, 0, 0, 0, 0]
+    y0 = [0, 0, 5, 0, 0, 0, 0]
     initial_orientation = np.array([1, 0])
     initial_position = np.array([0, 0])
     '''     def max_velocity(t, y, vehicle, initial_orientation, initial_position, distance):
@@ -120,7 +118,7 @@ def run_simulation(track, values):
     time = np.array([element for sublist in times for element in sublist.tolist()])
     x_positions = [k[0] for k in solutions]
     x_positions = np.array([element for sublist in x_positions for element in sublist.tolist()])
-    y_positions = [k[0] for k in solutions]
+    y_positions = [k[1] for k in solutions]
     y_positions = np.array([element for sublist in y_positions for element in sublist.tolist()])
     velocities = [k[2] for k in solutions]
     velocities = np.array([element for sublist in velocities for element in sublist.tolist()])
@@ -196,26 +194,24 @@ def turning(vehicle, y, initial_orientation, angle, t0, radius):
     initial_position = np.array([y0[0], y0[1]])
 
     def reached(t, y, vehicle, orientation, radius, angle, initial_orientation):
-        angle_swept = np.arccos(np.dot(initial_orientation, orientation))
+        velocity = np.array([y[2], y[3]])
+        calculated_orientation = velocity / np.linalg.norm(velocity)
+        angle_swept = np.arccos(np.dot(initial_orientation, calculated_orientation))
         return (angle - angle_swept)
     reached.terminal=True
     reached.direction= -1
 
-    while True:
-        #always coasting on turns so don't need conditionals for coast/burn
-        new_solution = scipy.integrate.solve_ivp(dy_dt_turning, [0, 500], y0, events=(reached), args=(vehicle, initial_orientation, radius, angle, initial_orientation), max_step=10)
-        solution.append(new_solution.y)
-        new_time = np.array(new_solution.t).astype(float)
-        if len(time) == 0: 
-            new_time = new_time + t0
-        else:
-            new_time = time[-1][-1] + new_time
-        time.append(new_time)
-        # check if it stopped because of distance 
-        if not len(new_solution.y_events[1]) == 0: # i.e, reached occured
-            return solution, time
-        else:
-            y0 = new_solution.y_events[0][0]
+    new_solution = scipy.integrate.solve_ivp(dy_dt_turning, [0, 1000], y0, events=(reached), args=(vehicle, initial_orientation, radius, angle, initial_orientation), max_step=0.2)
+    solution.append(new_solution.y)
+    new_time = np.array(new_solution.t).astype(float)
+    if len(time) == 0: 
+        new_time = new_time + t0
+    else:
+        new_time = time[-1][-1] + new_time
+    time.append(new_time)
+    # check if it stopped because of distance 
+    # if not len(new_solution.y_events[0]) == 0: # i.e, reached occured
+    return solution, time
 
 
 
