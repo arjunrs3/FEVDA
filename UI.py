@@ -1,6 +1,6 @@
 import PySimpleGUI as sg
 from Driving_simulation import *
-from Magic_Formula_Step import magic_main
+from new_step import run_simulation
 import numpy as np
 
 sg.theme('Black')
@@ -48,7 +48,7 @@ def run_ui():
         values = np.array(list(values.values())).astype(float)
         # End program if user closes window or
         if event == "Run Simulation": 
-            magic_main(0, values)
+            run_simulation(0, values)
             """ eco = Vehicle(values)
             t, x, y, velocities, fuel, total_mpg, ave_velocity = run_simulation(eco)
             window["-MPG-"].update(total_mpg)
