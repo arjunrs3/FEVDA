@@ -46,6 +46,7 @@ Thanks for your interest in contributing to this project! Please read [CONTRIBUT
 
 ### Contributors
 * **Arjun Shah (University of Illinois at Urbana-Champaign)** - *Initial work*
+* **Andy Baumgart (University of Illinois at Urbana-Champaign)** 
 See also the list of [contributors](https://github.com/arjunrs3/FEVDA/contributors) who participated in this project
 
 ## License 
