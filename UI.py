@@ -2,6 +2,7 @@ import PySimpleGUI as sg
 from Driving_simulation import *
 from new_step import run_simulation
 import numpy as np
+from Utils.plotting import plot
 
 sg.theme('Black')
 
@@ -48,11 +49,11 @@ def run_ui():
         values = np.array(list(values.values())).astype(float)
         # End program if user closes window or
         if event == "Run Simulation": 
-            run_simulation(0, values)
-            """ eco = Vehicle(values)
-            t, x, y, velocities, fuel, total_mpg, ave_velocity = run_simulation(eco)
+            track=get_track()
+            t, x, y, velocities, fuel, total_mpg, ave_velocity = run_simulation(track, values)
             window["-MPG-"].update(total_mpg)
-            window["-AVE-SPEED-"].update(ave_velocity) """
+            window["-AVE-SPEED-"].update(ave_velocity) 
+            plot(t, x, y, velocities, fuel)
         if event == sg.WIN_CLOSED:
             break
 
