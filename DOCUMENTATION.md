@@ -70,3 +70,48 @@ Code documentation for FEVDA, last updated 7/22/2023
 ## Battery model 
 Not yet implemented
 ## Mission modeling
+### Files:
+- new_step.py
+- vehicle_setup.py
+- Scripts/tires.py
+- Scripts/aero.py
+- Scripts.engine.py
+- Scripts/misc.py
+### Inputs:
+- Vehicle
+ - Contains dynamical information delineated in separate modules
+- Track
+  - Contains linear distance for straight maneuvers; radius for turns
+- Initial Orientation
+  - Hardcoded according to track start orientation
+- Initial Position
+  - Hardcoded as origin for track start
+### Returns:
+-Array including subarrays of time steps, x-positions, y-positions, velocity vectors, fuel values, mpg and average velocity over track length
+### Methodology:
+- Initiate the simulation using run_simulation(); operates as top layer of simulation controller 
+  - Initialzies simulated vehicle, defines arrays for time steps/solution values, accepts track CSV, and defines initial starting direction and travel distance
+  - Iterate through distinct track steps
+    - Step through track as a series of straight or turning maneuvers
+    - Keep track of solution values and time at end of each maneuver
+  - Separate and store true positions, velociites, travel distance and mpg over track maneuver individually from resultant solutions
+  
+- For Straight Manuevers
+  - Define conditional function checks for if vehicle has either transgressed maximum speed or minimum speeds; these will act as one type of limit to be passed into the time step function indicating that the engine state will change
+  - Define reached() function to assess whether track maneuver has been completed; acts as second limit to be passed into time step function
+    - For straight maneuvers this means having traversed a certain linear distance
+  - Initiate time stepping using numerical integration methods, accounting for the non-linearity of ODE/system variables passing a unique differential function for coasting or burning 
+    - dy_dt_straight_coasting() & dy_dt_straight_burning() represent the differential or change in solution values between time steps that is used by the numerical solver to solve the non-linear ODE system
+
+- For Turning Maneuvers
+  - Define reached() function to assess whether track maneuver has been completed; acts as the only limit to be passed into time step function since turning maneuvers imply coasting throughout
+    - For a turn this means having traversed a certain angular displacement
+  - Initiate time stepping using numerical integration methods, accounting for the non-linearity of ODE/system variables, passing a unique differential function for turning
+    -dy_dt_turning defines the differential or change in solution values between time steps that is used by the numerical solver to solve the non-linear ODE system
+  
+### Assumptions:
+- Track CSV CSV and dimensoning are accurate/reflective of modeled track
+- Numeric Solver time span is sufficently large such that limiting events are reached prior to time endpoint
+-Maximum time step is sufficiently small to achieve accurate numerical solution of non-linear ODE system given various vehicle archetypes and track conditions
+
+
