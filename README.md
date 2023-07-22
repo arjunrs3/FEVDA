@@ -38,7 +38,7 @@ pip install -r requirements.txt
 
 After the prerequisites are installed, the program can be run from the root directory using: 
 ```
-python Ecocalc.py
+python FEVDA.py
 ```
 Make sure to activate the virtual environment and use this command in the root directory. 
 
