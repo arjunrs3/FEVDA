@@ -14,4 +14,4 @@
 - Ship to other Shell Eco Marathon teams
 ## Eco only: Sensitivity analysis 
 ## ask for help from other teams: 
-- Fuel cell / electronics modeling
+- Fuel cell / battery electric modeling
