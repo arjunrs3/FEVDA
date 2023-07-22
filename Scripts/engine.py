@@ -22,5 +22,5 @@ def get_volumetric_fuel_rate(Vehicle, velocity):
     rpm = get_engine_rpm(Vehicle, velocity)
     torque = Vehicle.powerplant.torque_polynomial(rpm)
     power = Vehicle.powerplant.power_polynomial(rpm)
-    volumetric_fuel_rate = power * Vehicle.powerplant.BSFC / (Vehicle.powerplant.fuel_density * 1 * 10 ** -6) #this is fine
+    volumetric_fuel_rate = power * Vehicle.powerplant.BSFC / (Vehicle.powerplant.fuel_density * 1 * 10 ** -6) 
     return volumetric_fuel_rate # ml / s

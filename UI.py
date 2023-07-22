@@ -46,7 +46,8 @@ def run_ui():
     # Create an event loop
     while True:
         event, values = window.read()
-        values = np.array(list(values.values())).astype(float)
+        if values is not None: 
+            values = np.array(list(values.values())).astype(float)
         # End program if user closes window or
         if event == "Run Simulation": 
             track=get_track()
