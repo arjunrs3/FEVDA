@@ -3,9 +3,6 @@
 - delete unnecessary functions
 - convert to explicit units instead of implicit units
 - Reduce interdependencies between files of different hierarchies
-## Create track interface 
-- Decide whether or not PySimpleGUI is good for mapping
-- implement click to mark, save as csv
 ## Document 
 - generate proper documentation that is easy to read and understand
 ## Validate 
