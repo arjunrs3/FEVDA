@@ -2,7 +2,8 @@
 FEVDA, Fuel Efficient Vehicle Design and Analysis, is an open source project that uses physical relationships to estimate the efficiencies of simple vehicles. It was originally developed to aid in initial design of vehicles for the Shell Eco Marathon competition.
 
 ## Getting Started
-
+### Documentation 
+see [Documentation](DOCUMENTATION.md)
 ### Prerequisites
 Python 3 is needed before a development environment can be created. Note that python is not necessary if FEVDA is installed with an executable.
 
