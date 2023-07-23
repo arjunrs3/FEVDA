@@ -75,7 +75,7 @@ Not yet implemented
 - vehicle_setup.py
 - Scripts/tires.py
 - Scripts/aero.py
-- Scripts.engine.py
+- Scripts/engine.py
 - Scripts/misc.py
 ### Inputs:
 - Vehicle
@@ -90,11 +90,11 @@ Not yet implemented
 -Array including subarrays of time steps, x-positions, y-positions, velocity vectors, fuel values, mpg and average velocity over track length
 ### Methodology:
 - Initiate the simulation using run_simulation(); operates as top layer of simulation controller 
-  - Initialzies simulated vehicle, defines arrays for time steps/solution values, accepts track CSV, and defines initial starting direction and travel distance
+  - Initializes simulated vehicle, defines arrays for time steps/solution values, accepts track CSV, and defines initial starting direction and travel distance
   - Iterate through distinct track steps
     - Step through track as a series of straight or turning maneuvers
     - Keep track of solution values and time at end of each maneuver
-  - Separate and store true positions, velociites, travel distance and mpg over track maneuver individually from resultant solutions
+  - Separate and store true positions, velocities, travel distance and mpg over track maneuver individually from resultant solutions
   
 - For Straight Manuevers
   - Define conditional function checks for if vehicle has either transgressed maximum speed or minimum speeds; these will act as one type of limit to be passed into the time step function indicating that the engine state will change
@@ -113,5 +113,23 @@ Not yet implemented
 - Track CSV CSV and dimensoning are accurate/reflective of modeled track
 - Numeric Solver time span is sufficently large such that limiting events are reached prior to time endpoint
 -Maximum time step is sufficiently small to achieve accurate numerical solution of non-linear ODE system given various vehicle archetypes and track conditions
+## Creating a track 
+Tracks are stored as csv files so they can be easily parsed by the solver. Each line is a maneuver (straight or turn)
+- To go straight, the first value is 0, the second value is the distance in meters, and the third value is 0.
+- To turn, the first value is 1, the second value is the radius in meters (negative to go right, positive to go left), and the third value is the angular displacement of the turn in degrees (i.e., the difference between the starting orientation and the ending orientation).
+  - Note that any turns over 180 degrees will have to be broken into two turning maneuvers
+### Example track: 
+'''
+0, 100, 0
+1, -10, 90
+0, 100, 0
+1, -10, 90
+0, 100, 0
+1, -10, 90
+0, 100, 0
+1, -10, 90
+'''
+The track contains four straights of 100 meters with four right 90 degree turns, each with a radius of 10 m. \
 
+Previous tracks have been created by tracing the track in a CAD program an extracting the distancese, and turn radii and displacements. 
 
