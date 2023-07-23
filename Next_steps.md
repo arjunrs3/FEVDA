@@ -3,8 +3,6 @@
 - delete unnecessary functions
 - convert to explicit units instead of implicit units
 - Reduce interdependencies between files of different hierarchies
-## Document 
-- generate proper documentation that is easy to read and understand
 ## Validate 
 - validate methodology through unit testing physical relationships
 - Maybe some car validation as well
@@ -12,6 +10,5 @@
 - Tire modeling relationships have already been validated, but create unit tests
 ## Ship 
 - Ship to other Shell Eco Marathon teams
-## Eco only: Sensitivity analysis 
 ## ask for help from other teams: 
 - Fuel cell / battery electric modeling
