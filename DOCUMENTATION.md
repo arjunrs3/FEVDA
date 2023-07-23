@@ -119,7 +119,7 @@ Tracks are stored as csv files so they can be easily parsed by the solver. Each 
 - To turn, the first value is 1, the second value is the radius in meters (negative to go right, positive to go left), and the third value is the angular displacement of the turn in degrees (i.e., the difference between the starting orientation and the ending orientation).
   - Note that any turns over 180 degrees will have to be broken into two turning maneuvers
 ### Example track: 
-'''
+```
 0, 100, 0
 1, -10, 90
 0, 100, 0
@@ -128,8 +128,8 @@ Tracks are stored as csv files so they can be easily parsed by the solver. Each 
 1, -10, 90
 0, 100, 0
 1, -10, 90
-'''
-The track contains four straights of 100 meters with four right 90 degree turns, each with a radius of 10 m. \
+```
+The track contains four straights of 100 meters with four right 90 degree turns, each with a radius of 10 m. 
 
 Previous tracks have been created by tracing the track in a CAD program an extracting the distancese, and turn radii and displacements. 
 
