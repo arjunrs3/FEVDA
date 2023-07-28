@@ -40,6 +40,9 @@ def get_turning_values(Vehicle, velocity, radius):
 # solve the straight line problem for a given toe
 def get_straight_rolling_resistance(Vehicle):
     total_drag = 0 
-    for wheel in Vehicle.wheels.values(): 
-        total_drag = total_drag + np.cos((wheel.toe)) * wheel.fLongitudinal + np.sin((wheel.toe)) * wheel.cornering_stiffness * np.degrees(wheel.toe)
+    for tag, wheel in Vehicle.wheels.items():
+        if tag == "rear":
+            total_drag += wheel.fLongitudinal
+        else:
+            total_drag = total_drag + np.cos((wheel.toe)) * wheel.fLongitudinal + np.sin((wheel.toe)) * wheel.cornering_stiffness * np.degrees(wheel.toe) 
     return total_drag
