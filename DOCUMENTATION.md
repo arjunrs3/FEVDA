@@ -131,5 +131,34 @@ Tracks are stored as csv files so they can be easily parsed by the solver. Each 
 ```
 The track contains four straights of 100 meters with four right 90 degree turns, each with a radius of 10 m. 
 
-Previous tracks have been created by tracing the track in a CAD program an extracting the distancese, and turn radii and displacements. 
+Previous tracks have been created by tracing the track in a CAD program an extracting the distances, and turn radii and displacements. 
+## Validation
+### Files
+Validation.py
+vehicle_setup.py
+Utils/helper_functions.py
+Scripts/aero.py
+### Inputs
+- Car
+  - Car parameters are taken from Pac CAR II: World's Most Fuel Efficient Vehicle according to their own validation parameters. These exact parametes or the validation can be found within the Validation.py module and are passed in as arguments to instantiate the modeled vehicles.
+- Physical Coefficients
+  - Some of the physical coefficients, including rolling resistance and cornering stiffness are hardcoded within the regular simulation; these calculated values or constants are manually redefined/hardcoded in accordance with the Pac CAR validation provisions following the instantiation of the car. The critical difference is the use of the PAC car's nominal rolling resistance of 0.00081 for validation of tire drag vs toe angle while traveling straight, and tire drag vs turn radii at different speeds
+### Returns
+- Aero drag and tire drag while traveling straight as printed values
+- Aero drag and tire drag while cornering as printed values
+- Tire drag as toe angle is changed while traveling straight
+- Tire drag over turns of different radii, charted across multiple different speeds
+
+- Critically, FEVDA varied in measuring tire drag vs toe angle while traveling straight by less 10 percent and tire drag over turns of different radii for various speeds less than 5 percent. Being the actionable validation measures, this agreement in physical modeling between PAC Car and FEVDA provides a reliable basis for the simulation results.
+
+- It's important to note that subtle differences between Pac CAR and FEVDA validation values can be explained by small discrepancies in certain physical constants and error & rounding handling.
+### Methodology
+- FEVDA leverages and recreates significant dynamical relationshps from PAC CAr II: The World's Most Fuel Efficient Vehicle; functions detailing and delineating these values are often discretley packaged and described. Validation.py is simply an attempt to graphically depict the agreement between the conclusions of the PAC Car and FEVDA given similar vehicle parameters. This agreement provides reasonable certainty that the results of FEVDA are both accurate and generalizable to vehicles that the share core dynamical assumptions of the PAC Car and the Eco Marathon community
+### Assumptions
+- In an attempt to improve the accuracy of FEVDA, physical constants such as gravity and the density of air contain more significant figures than are described by PAC Car. These changes alongside unwritten physical parameter discrepancies between the PAC Car and the FEVDA model are assumed to account for remaining differences in validation results
+
+- Robust mechanical and mathematical agreement between FEVDA validation and PAC Car results define the core evidence for generalizing FEVDA simulation results
+
+
+
 

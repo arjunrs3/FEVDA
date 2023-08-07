@@ -50,10 +50,10 @@ def plot_vehicle(self):
     ax.set_aspect("equal")
     plt.show()
 
-nominal_RR = .0024
-camberRRdata = nominal_RR/.00081 * np.array([[0, 4, 7, 10, 12, 14],[0.000832, 0.001, 0.00099, 0.00105, 0.0011, 0.0012]]) # data from Pac CAR scaled for Michelin Cross-Ply tires
+#nominal_RR = .0024
+#camberRRdata = nominal_RR/.00081 * np.array([[0, 4, 7, 10, 12, 14],[0.000832, 0.001, 0.00099, 0.00105, 0.0011, 0.0012]]) # data from Pac CAR scaled for Michelin Cross-Ply tires
 
-def get_RRcoeff(wheel, camber): 
+def get_RRcoeff(wheel, camber,camberRRdata = .0024 /.00081 * np.array([[0, 4, 7, 10, 12, 14],[0.000832, 0.001, 0.00099, 0.00105, 0.0011, 0.0012]])): 
     wheel.RRcoeff = np.interp(camber, camberRRdata[0], camberRRdata[1])
 
 # get the cornering stiffness according to a simplified form of the Magic Formula
